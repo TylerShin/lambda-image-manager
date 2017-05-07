@@ -1,0 +1,31 @@
+
+service: lambda-image-resizer
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: prod
+  region: us-east-1
+
+package:
+  artifact: dst.zip
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
+# you can add packaging information here
+#package:
+#  include:
+#    - include-me.js
+#    - include-me-dir/**
+#  exclude:
+#    - exclude-me.js
+#    - exclude-me-dir/**
+
+functions:
+  resizeImage:
+    handler: handlers.resizeImage
+    events:
+      - http:
+          path: resizeImage
+          method: get

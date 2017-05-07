@@ -1,0 +1,24 @@
+{
+  "name": "lambda-image",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "rm -rf dst && tsc && cd src && find . -name '*.json' -type f -exec cp {} ../dst/{} \\; && cd ..",
+    "pack": "rm -f dst.zip && cp package.json dst/package.json && cp -r demo dst/demo  && cd dst && npm install --cache=./.npm --production && zip -r ../dst.zip . ** && cd ..",
+    "deploy": "npm run build && npm run pack && serverless deploy",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "0.0.10",
+    "@types/jimp": "^0.2.1",
+    "serverless": "^1.12.1",
+    "tslint": "^5.2.0",
+    "typescript": "^2.3.2"
+  },
+  "dependencies": {
+    "jimp": "^0.2.27"
+  }
+}
