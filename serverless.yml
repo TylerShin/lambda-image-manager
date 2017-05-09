@@ -29,3 +29,11 @@ functions:
       - http:
           path: getImage
           method: get
+
+  uploadImage:
+    handler: handlers.uploadImage
+    events:
+      - http:
+          path: uploadImage
+          method: post
+          cors: true
