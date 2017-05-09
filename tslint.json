@@ -6,6 +6,8 @@
     "jsdoc-format": false,
     "no-string-literal": false,
     "object-literal-sort-keys": false,
+    "variable-name": false,
+    "no-console": false,
     "indent": ["spaces"],
     "no-var-requires": false,
     "ordered-imports": [false]

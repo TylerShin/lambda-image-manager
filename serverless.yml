@@ -23,9 +23,9 @@ package:
 #    - exclude-me-dir/**
 
 functions:
-  resizeImage:
-    handler: handlers.resizeImage
+  getImage:
+    handler: handlers.getImage
     events:
       - http:
-          path: resizeImage
+          path: getImage
           method: get

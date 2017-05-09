@@ -1,7 +1,7 @@
-import resizeImage from "./resizeImage";
+import getImage from "./getImage";
 
 const handlers = {
-  resizeImage,
+  getImage,
 };
 
 export = handlers;

@@ -13,12 +13,13 @@
   "license": "ISC",
   "devDependencies": {
     "@types/aws-lambda": "0.0.10",
-    "@types/jimp": "^0.2.1",
+    "@types/gm": "^1.17.30",
     "serverless": "^1.12.1",
     "tslint": "^5.2.0",
+    "tslint-microsoft-contrib": "^4.0.1",
     "typescript": "^2.3.2"
   },
   "dependencies": {
-    "jimp": "^0.2.27"
+    "gm": "^1.23.0",
   }
 }
