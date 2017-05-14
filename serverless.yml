@@ -6,6 +6,12 @@ provider:
   runtime: nodejs6.10
   stage: prod
   region: us-east-1
+  environment: ${file(./env/${opt:stage}.yml)}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:*"
+      Resource: "arn:aws:s3:::${file(./env/${opt:stage}.yml):S3_BUCKET_NAME}/*"
 
 package:
   artifact: dst.zip

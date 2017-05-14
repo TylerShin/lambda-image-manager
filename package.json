@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rm -rf dst && tsc && cd src && find . -name '*.json' -type f -exec cp {} ../dst/{} \\; && cd ..",
     "pack": "rm -f dst.zip && cp package.json dst/package.json && cp -r demo dst/demo  && cd dst && npm install --cache=./.npm --production && zip -r ../dst.zip . ** && cd ..",
-    "deploy": "npm run build && npm run pack && serverless deploy",
+    "deploy:prod": "npm run build && npm run pack && serverless deploy --stage prod",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -21,6 +21,7 @@
     "typescript": "^2.3.2"
   },
   "dependencies": {
+    "aws-sdk": "^2.50.0",
     "busboy": "^0.2.14",
     "gm": "^1.23.0"
   }
