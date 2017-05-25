@@ -5,3 +5,4 @@ dst
 dst.*
 # Serverless directories
 .serverless
+.idea/

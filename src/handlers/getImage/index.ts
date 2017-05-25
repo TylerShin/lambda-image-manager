@@ -1,17 +1,30 @@
 import * as GraphicMagick from "gm";
 import setSize from "./setSize";
+import S3Manager from "../../helpers/s3Manager";
 
 const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
   const gm = GraphicMagick.subClass({ imageMagick: true });
   let beforeProcessingTime: number;
   let afterProcessingTime: number;
-  let buffer: Buffer = new Buffer("sample buffer");
+  let buffer: Buffer = new Buffer("");
+
+  let originalImage = gm("./demo/cat.jpg");
+
+  if (event.queryStringParameters) {
+    if (event.queryStringParameters["id"] && event.queryStringParameters["fileName"]) {
+      const fileId = event.queryStringParameters["id"];
+      const fileName = event.queryStringParameters["fileName"];
+
+      const fileExist = await S3Manager.checkFileExist(fileId, fileName);
+      if (fileExist) {
+        const originFileBuffer = await S3Manager.getOriginFile(fileId, fileName);
+        originalImage = (gm as any)(originFileBuffer);
+      }
+    }
+  }
 
   // Record before image processing time
   beforeProcessingTime = Date.now();
-
-  // set gmState from image
-  const originalImage = gm("./demo/cat.jpg");
 
   // Get target image size
   const size = await setSize(event, originalImage);
