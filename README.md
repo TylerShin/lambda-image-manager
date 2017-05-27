@@ -10,6 +10,9 @@ If you aren't used to [Serverless](https://serverless.com/) or AWS Lambda, I hig
 
 Remember! AWS provides free tier amount, but this whole service is not **FREE**.
 
+### Todo List
+* Add DynamoDB logic. 
+
 ### Prerequisites
 
 - Make empty AWS S3 bucket for image file store.  
@@ -53,11 +56,15 @@ npm run deploy:prod
 WIP
 
 
-## Deployment
-
-```
-npm run deploy:prod
-```
+## How It Works
+#### getImage
+* A browser try to presentation <img /> tag with src property heading our API gateway that trigger lambda function.
+* Lambda get request with image id, image file name, image manipulation options.
+* Trying to find pre-manipulated result from AWS DynamoDB as cache. If the target image is already manipulated with same option, then read that image's address from DynamoDB and return redirect response to that address.
+* If there is no cache, manipulate target image with given options.
+* Change the image to Buffer with BASE64 encode.
+* After that, store the result to S3 and record result address to DynamoDB with manipulation options.
+* return manipulated target image to user.
 
 ## Built With
 

@@ -52,12 +52,12 @@ const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
 
   // return HTTP result
   await context.done(undefined, {
-    statusCode: 200,
+    statusCode: 302,
     headers: {
-      "Content-Type": "image/*",
+      Location: "https://images.vingle.net/upload/t_ca_xl/vm3qlmawdpz7qcnycjjc.jpg",
     },
-    body: buffer.toString("base64"),
-    isBase64Encoded: true,
+    body: "",
+    // isBase64Encoded: true,
   });
 };
 
