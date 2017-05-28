@@ -44,7 +44,7 @@ const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
       });
   });
 
- // log image processing time
+  // log image processing time
   afterProcessingTime = Date.now();
   if (afterProcessingTime && beforeProcessingTime) {
     console.log(`The image processing time was ${afterProcessingTime - beforeProcessingTime}`);
@@ -52,12 +52,12 @@ const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
 
   // return HTTP result
   await context.done(undefined, {
-    statusCode: 302,
+    statusCode: 200,
     headers: {
-      Location: "https://images.vingle.net/upload/t_ca_xl/vm3qlmawdpz7qcnycjjc.jpg",
+      "Content-Type": "image/*",
     },
-    body: "",
-    // isBase64Encoded: true,
+    body: buffer.toString("base64"),
+    isBase64Encoded: true,
   });
 };
 
