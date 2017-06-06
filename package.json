@@ -15,6 +15,7 @@
     "@types/aws-lambda": "0.0.10",
     "@types/busboy": "^0.2.3",
     "@types/gm": "^1.17.30",
+    "@types/uuid": "^3.0.0",
     "serverless": "^1.12.1",
     "tslint": "^5.2.0",
     "tslint-microsoft-contrib": "^4.0.1",
@@ -23,6 +24,7 @@
   "dependencies": {
     "aws-sdk": "^2.50.0",
     "busboy": "^0.2.14",
-    "gm": "^1.23.0"
+    "gm": "^1.23.0",
+    "uuid": "^3.0.1"
   }
 }

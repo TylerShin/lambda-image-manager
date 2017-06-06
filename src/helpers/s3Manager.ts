@@ -26,7 +26,7 @@ class S3Manager {
         Bucket: process.env.S3_BUCKET_NAME,
         Key: `${process.env.S3_DEST_PREFIX}/${fileId}/${fileName}/${version}`,
       }, (err, _metadata) => {
-        if (err && err.code === "NotFound") {
+        if (err) {
           resolve(false);
         } else {
           resolve(true);

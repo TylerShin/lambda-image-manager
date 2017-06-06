@@ -18,11 +18,12 @@ export default async function setSize(event: AWSLambda.APIGatewayEvent, gmImage:
       gmImage
         .size((err, size) => {
           if (err) {
+            console.error(`Had error to get original image size`, err);
             reject(err);
           } else {
             result.width = size.width;
             result.height = size.height;
-            resolve();
+            resolve(result);
           }
         });
     });

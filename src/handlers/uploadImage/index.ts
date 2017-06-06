@@ -1,13 +1,17 @@
-// import * as Busboy from "busboy";
-// import * as AWS from "aws-sdk";
 import S3Manager from "../../helpers/s3Manager";
+import FilenameMaker from "../../helpers/filenameMaker";
 
 const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
 
   const buffer = new Buffer(event.body as string, "base64");
 
   try {
-    const result: any = await S3Manager.uploadFile(buffer, "hosigi", "chicken");
+    const result: any = await S3Manager.uploadFile(
+      buffer,
+      FilenameMaker.getNewFileId(),
+      FilenameMaker.getNewFileName(),
+    );
+
     const keyArray = result.Key.split("/");
     const uploadResult = {
       version: keyArray[keyArray.length - 1],
