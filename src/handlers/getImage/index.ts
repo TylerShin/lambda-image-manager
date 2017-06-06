@@ -17,7 +17,7 @@ const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
 
       const fileExist = await S3Manager.checkFileExist(fileId, fileName);
       if (fileExist) {
-        const originFileBuffer = await S3Manager.getOriginFile(fileId, fileName);
+        const originFileBuffer = await S3Manager.getFile(fileId, fileName);
         originalImage = (gm as any)(originFileBuffer);
       }
     }
