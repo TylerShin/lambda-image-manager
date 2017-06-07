@@ -4,6 +4,15 @@ import FilenameMaker from "../../helpers/filenameMaker";
 const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
 
   const buffer = new Buffer(event.body as string, "base64");
+  const fileSize = buffer.byteLength;
+
+  // Size validation
+  if (fileSize > process.env.MAX_SIZE_LIMIT) {
+    return context.done(undefined, {
+      statusCode: 403,
+      body: JSON.stringify("File size is too big"),
+    });
+  }
 
   try {
     const result: any = await S3Manager.uploadFile(

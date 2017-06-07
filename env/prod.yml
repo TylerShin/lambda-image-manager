@@ -1,2 +1,3 @@
 S3_BUCKET_NAME: tylor-assets
 S3_DEST_PREFIX: lambda
+MAX_SIZE_LIMIT: 2000000
