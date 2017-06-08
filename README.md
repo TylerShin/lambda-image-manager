@@ -1,21 +1,21 @@
 # Lambda Image Manager
 
-Lambda Image Manager is AWS Lambda function that store, get, manipulate images in AWS S3.  
+Lambda Image Manager is AWS Lambda function that store, get, manipulate images in AWS S3.
 
-If you are using Cloudinary or Imgix like service just for resizing or basic image manipulation, maybe you don't need them anymore. 
+If you are using Cloudinary or Imgix like service just for resizing or basic image manipulation, maybe you don't need them anymore.
 
 ## Before Start
 
-If you aren't used to [Serverless](https://serverless.com/) or AWS Lambda, I highly recommend that read Serverless docs first.   
+If you aren't used to [Serverless](https://serverless.com/) or AWS Lambda, I highly recommend that read Serverless docs first.
 
 Remember! AWS provides free tier amount, but this whole service is not **FREE**.
 
 ### Todo List
-* Add DynamoDB logic. 
+* Add DynamoDB logic.
 
 ### Prerequisites
 
-- Make empty AWS S3 bucket for image file store.  
+- Make empty AWS S3 bucket for image file store.
 ~~- Make and set AWS DynamoDB for cache.~~(Not supported yet)
 
 ### Installing
@@ -26,7 +26,7 @@ cd lambda-image-manager
 npm install
 ```
 
-And set production environment.  
+And set production environment.
 (If you want to stage or other)
 
 ```
@@ -76,8 +76,8 @@ WIP
 
 ## Authors
 
-* **breath103** - *Tech lead & Initial idea maker*
 * **Tylor Shin** - *Project Manager* - [TylorShin](https://github.com/TylorShin)
+* **breath103** - *Tech lead & Initial idea maker* - [breath103](https://github.com/breath103)
 
 ## License
 
