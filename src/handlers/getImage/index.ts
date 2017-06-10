@@ -1,6 +1,7 @@
 import * as GraphicMagick from "gm";
 import setSize from "./setSize";
 import S3Manager from "../../helpers/s3Manager";
+import ImageMeta from "../../db/model/imageMeta";
 // interfaces
 import FileNameMaker, { IImageProcessOptions } from "../../helpers/filenameMaker";
 
@@ -21,9 +22,9 @@ const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
     imageProcessOptions.width = size.width;
     imageProcessOptions.height = size.height;
 
-    if (event.queryStringParameters["id"] && event.queryStringParameters["fileName"]) {
+    if (event.queryStringParameters["id"] && event.queryStringParameters["filename"]) {
       const fileId = event.queryStringParameters["id"];
-      const fileName = event.queryStringParameters["fileName"];
+      const fileName = event.queryStringParameters["filename"];
 
       let version = FileNameMaker.getVersion(imageProcessOptions);
       if (imageProcessOptions.width === 0 || imageProcessOptions.height === 0) {
@@ -70,6 +71,43 @@ const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
 
         await S3Manager.uploadFile(buffer, fileId, fileName, version);
       }
+
+      // Record download count to DynamoDB
+      await new Promise((resolve, reject) => {
+        ImageMeta.get({ id: fileId, version }, (err: Error, imageMeta: any) => {
+          if (err) {
+            console.log(err);
+            reject(err);
+          } else if (!imageMeta) {
+            let url: string;
+            if (version === "original") {
+              url = `/id=${fileId}&filename=${fileName}`;
+            } else {
+              url = `/id=${fileId}&filename=${fileName}&width=${imageProcessOptions.width}&height=${imageProcessOptions.height}`;
+            }
+            const newImageMeta = new ImageMeta({
+              id: fileId,
+              version,
+              url,
+              downloadCount: 1,
+            });
+            newImageMeta.save((error: Error) => {
+              if (error) {
+                console.log(error);
+                reject(error);
+              } else {
+                console.log("Succeeded to record result to DynamoDB");
+                resolve();
+              }
+            });
+          } else {
+            // update count
+            console.log(imageMeta);
+            console.log(imageMeta.downloadCount);
+            resolve();
+          }
+        });
+      });
     }
   }
 

@@ -32,7 +32,8 @@ functions:
           method: post
           cors: true
 
-Resources:
+resources:
+  Resources:
     DynamoDbTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -42,8 +43,6 @@ Resources:
             AttributeType: S
           - AttributeName: version
             AttributeType: S
-          - AttributeName: downloadCount
-            AttributeType: N
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -56,12 +55,14 @@ Resources:
       Type: AWS::IAM::Policy
       DependsOn: DynamoDbTable
       Properties:
-        PolicyName: lambda-dynamodb
+        PolicyName: AmazonDynamoDBFullAccess
         PolicyDocument:
           Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Action: "dynamodb:*"
+              Action: [
+                "dynamodb:*"
+              ]
               Resource: "arn:aws:dynamodb:*:*:table/${file(./env/${opt:stage}.yml):DYNAMO_DB_TABLE_NAME}"
         Roles:
           - Ref: IamRoleLambdaExecution

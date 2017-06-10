@@ -2,7 +2,6 @@ import S3Manager from "../../helpers/s3Manager";
 import FilenameMaker from "../../helpers/filenameMaker";
 
 const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
-
   const buffer = new Buffer(event.body as string, "base64");
   const fileSize = buffer.byteLength;
 
