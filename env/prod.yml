@@ -1,4 +1,4 @@
-S3_BUCKET_NAME: tylor-assets
+S3_BUCKET_NAME: tylor-lambda-dashboard
 S3_DEST_PREFIX: lambda
 DYNAMO_DB_TABLE_NAME: lambda-image-manager-stats
 MAX_SIZE_LIMIT: 2000000

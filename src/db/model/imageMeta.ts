@@ -3,7 +3,7 @@ const dynamoose = require("dynamoose");
 const Schema = dynamoose.Schema;
 
 const imageMetaSchema = new Schema({
-  id: {
+  fileId: {
     type: String,
     hashKey: true,
   },
@@ -11,12 +11,14 @@ const imageMetaSchema = new Schema({
     type: String,
     rangeKey: true,
   },
-  url: {
+  id: {
     type: String,
   },
-  downloadCount: {
-    type: Number,
+  fileName: {
+    type: String,
   },
+}, {
+  timestamps: true,
 });
 
 const ImageMeta = dynamoose.model("lambda-image-manager-stats", imageMetaSchema);

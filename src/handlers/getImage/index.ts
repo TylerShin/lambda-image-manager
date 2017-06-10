@@ -1,4 +1,5 @@
 import * as GraphicMagick from "gm";
+import * as uuid from "uuid";
 import setSize from "./setSize";
 import S3Manager from "../../helpers/s3Manager";
 import ImageMeta from "../../db/model/imageMeta";
@@ -74,36 +75,19 @@ const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
 
       // Record download count to DynamoDB
       await new Promise((resolve, reject) => {
-        ImageMeta.get({ id: fileId, version }, (err: Error, imageMeta: any) => {
-          if (err) {
-            console.log(err);
-            reject(err);
-          } else if (!imageMeta) {
-            let url: string;
-            if (version === "original") {
-              url = `/id=${fileId}&filename=${fileName}`;
-            } else {
-              url = `/id=${fileId}&filename=${fileName}&width=${imageProcessOptions.width}&height=${imageProcessOptions.height}`;
-            }
-            const newImageMeta = new ImageMeta({
-              id: fileId,
-              version,
-              url,
-              downloadCount: 1,
-            });
-            newImageMeta.save((error: Error) => {
-              if (error) {
-                console.log(error);
-                reject(error);
-              } else {
-                console.log("Succeeded to record result to DynamoDB");
-                resolve();
-              }
-            });
+        const newImageMeta = new ImageMeta({
+          fileId,
+          version,
+          id: uuid.v4(),
+          fileName,
+        });
+
+        newImageMeta.save((error: Error) => {
+          if (error) {
+            console.log(error);
+            reject(error);
           } else {
-            // update count
-            console.log(imageMeta);
-            console.log(imageMeta.downloadCount);
+            console.log("Succeeded to record result to DynamoDB");
             resolve();
           }
         });

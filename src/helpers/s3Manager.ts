@@ -42,6 +42,7 @@ class S3Manager {
         Key: `${process.env.S3_DEST_PREFIX}/${fileId}/${fileName}/${version}`,
       }, (err, data) => {
         if (err) {
+          console.error(err);
           reject(err);
         } else {
           resolve(data.Body);
