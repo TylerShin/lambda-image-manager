@@ -31,3 +31,37 @@ functions:
           path: uploadImage
           method: post
           cors: true
+
+Resources:
+    DynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: "${file(./env/${opt:stage}.yml):DYNAMO_DB_TABLE_NAME}"
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: version
+            AttributeType: S
+          - AttributeName: downloadCount
+            AttributeType: N
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: version
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+    DynamoDBIamPolicy:
+      Type: AWS::IAM::Policy
+      DependsOn: DynamoDbTable
+      Properties:
+        PolicyName: lambda-dynamodb
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action: "dynamodb:*"
+              Resource: "arn:aws:dynamodb:*:*:table/${file(./env/${opt:stage}.yml):DYNAMO_DB_TABLE_NAME}"
+        Roles:
+          - Ref: IamRoleLambdaExecution
