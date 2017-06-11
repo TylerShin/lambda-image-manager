@@ -54,12 +54,12 @@ resources:
         AttributeDefinitions:
           - AttributeName: fileId
             AttributeType: S
-          - AttributeName: version
+          - AttributeName: id
             AttributeType: S
         KeySchema:
           - AttributeName: fileId
             KeyType: HASH
-          - AttributeName: version
+          - AttributeName: id
             KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 5

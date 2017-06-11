@@ -7,11 +7,11 @@ const imageMetaSchema = new Schema({
     type: String,
     hashKey: true,
   },
-  version: {
+  id: {
     type: String,
     rangeKey: true,
   },
-  id: {
+  version: {
     type: String,
   },
   fileName: {
