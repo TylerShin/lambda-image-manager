@@ -10,6 +10,9 @@
     "no-console": false,
     "indent": ["spaces"],
     "no-var-requires": false,
-    "ordered-imports": [false]
+    "ordered-imports": [false],
+    "max-line-length": [
+      false
+    ]
   }
 }

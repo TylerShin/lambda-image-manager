@@ -1,6 +1,8 @@
 import * as GraphicMagick from "gm";
+import * as uuid from "uuid";
 import setSize from "./setSize";
 import S3Manager from "../../helpers/s3Manager";
+import ImageMeta from "../../db/model/imageMeta";
 // interfaces
 import FileNameMaker, { IImageProcessOptions } from "../../helpers/filenameMaker";
 
@@ -21,18 +23,16 @@ const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
     imageProcessOptions.width = size.width;
     imageProcessOptions.height = size.height;
 
-    if (event.queryStringParameters["id"] && event.queryStringParameters["fileName"]) {
+    if (event.queryStringParameters["id"] && event.queryStringParameters["filename"]) {
       const fileId = event.queryStringParameters["id"];
-      const fileName = event.queryStringParameters["fileName"];
+      const fileName = event.queryStringParameters["filename"];
 
       let version = FileNameMaker.getVersion(imageProcessOptions);
       if (imageProcessOptions.width === 0 || imageProcessOptions.height === 0) {
         version = "original";
       }
 
-      const fileExist = await S3Manager.checkFileExist(fileId, fileName, version);
-
-      if (fileExist) {
+      try {
         const originFileBuffer = await S3Manager.getFile(fileId, fileName, version);
         originalImage = (gm as any)(originFileBuffer);
 
@@ -49,7 +49,7 @@ const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
               }
             });
         });
-      } else {
+      } catch (_err) {
         const originFileBuffer = await S3Manager.getFile(fileId, fileName);
         originalImage = (gm as any)(originFileBuffer);
 
@@ -70,6 +70,16 @@ const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
 
         await S3Manager.uploadFile(buffer, fileId, fileName, version);
       }
+
+      // Record download count to DynamoDB
+      const newImageMeta = new ImageMeta({
+        fileId,
+        version,
+        id: uuid.v4(),
+        fileName,
+      });
+
+      newImageMeta.save();
     }
   }
 

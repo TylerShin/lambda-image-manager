@@ -24,6 +24,7 @@
   "dependencies": {
     "aws-sdk": "^2.50.0",
     "busboy": "^0.2.14",
+    "dynamoose": "^0.7.0",
     "gm": "^1.23.0",
     "uuid": "^3.0.1"
   }

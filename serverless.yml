@@ -7,11 +7,6 @@ provider:
   stage: prod
   region: us-east-1
   environment: ${file(./env/${opt:stage}.yml)}
-  iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - "s3:*"
-      Resource: "arn:aws:s3:::${file(./env/${opt:stage}.yml):S3_BUCKET_NAME}/*"
 
 package:
   artifact: dst.zip
@@ -32,36 +27,56 @@ functions:
           method: post
           cors: true
 
-Resources:
+resources:
+  Resources:
+    S3BucketToDashboard:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: "${file(./env/${opt:stage}.yml):S3_BUCKET_NAME}"
+
+    S3IamPolicy:
+      Type: AWS::IAM::Policy
+      Properties:
+        PolicyName: S3BucketToDashboard-s3
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action: s3:*
+              Resource: "arn:aws:s3:::${file(./env/${opt:stage}.yml):S3_BUCKET_NAME}/*"
+        Roles:
+          - Ref: IamRoleLambdaExecution
+
     DynamoDbTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: "${file(./env/${opt:stage}.yml):DYNAMO_DB_TABLE_NAME}"
         AttributeDefinitions:
+          - AttributeName: fileId
+            AttributeType: S
           - AttributeName: id
             AttributeType: S
-          - AttributeName: version
-            AttributeType: S
-          - AttributeName: downloadCount
-            AttributeType: N
         KeySchema:
-          - AttributeName: id
+          - AttributeName: fileId
             KeyType: HASH
-          - AttributeName: version
+          - AttributeName: id
             KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
+
     DynamoDBIamPolicy:
       Type: AWS::IAM::Policy
       DependsOn: DynamoDbTable
       Properties:
-        PolicyName: lambda-dynamodb
+        PolicyName: AmazonDynamoDBFullAccess
         PolicyDocument:
           Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Action: "dynamodb:*"
+              Action: [
+                "dynamodb:*"
+              ]
               Resource: "arn:aws:dynamodb:*:*:table/${file(./env/${opt:stage}.yml):DYNAMO_DB_TABLE_NAME}"
         Roles:
           - Ref: IamRoleLambdaExecution
