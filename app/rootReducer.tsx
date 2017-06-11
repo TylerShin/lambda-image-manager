@@ -1,0 +1,10 @@
+import { combineReducers } from "redux";
+import { routerReducer } from "react-router-redux";
+
+export interface IAppState {}
+
+export const initialState: IAppState = {};
+
+export const rootReducer = combineReducers({
+  routing: routerReducer,
+});

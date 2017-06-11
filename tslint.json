@@ -8,6 +8,7 @@
     "object-literal-sort-keys": false,
     "variable-name": false,
     "no-console": false,
+    "no-empty-interface": false,
     "indent": ["spaces"],
     "no-var-requires": false,
     "ordered-imports": [false],
