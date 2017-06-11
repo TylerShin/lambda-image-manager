@@ -32,9 +32,7 @@ const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
         version = "original";
       }
 
-      const fileExist = await S3Manager.checkFileExist(fileId, fileName, version);
-
-      if (fileExist) {
+      try {
         const originFileBuffer = await S3Manager.getFile(fileId, fileName, version);
         originalImage = (gm as any)(originFileBuffer);
 
@@ -51,7 +49,7 @@ const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
               }
             });
         });
-      } else {
+      } catch (_err) {
         const originFileBuffer = await S3Manager.getFile(fileId, fileName);
         originalImage = (gm as any)(originFileBuffer);
 
@@ -74,24 +72,14 @@ const handler: AWSLambda.ProxyHandler = async (event, context, _callback) => {
       }
 
       // Record download count to DynamoDB
-      await new Promise((resolve, reject) => {
-        const newImageMeta = new ImageMeta({
-          fileId,
-          version,
-          id: uuid.v4(),
-          fileName,
-        });
-
-        newImageMeta.save((error: Error) => {
-          if (error) {
-            console.log(error);
-            reject(error);
-          } else {
-            console.log("Succeeded to record result to DynamoDB");
-            resolve();
-          }
-        });
+      const newImageMeta = new ImageMeta({
+        fileId,
+        version,
+        id: uuid.v4(),
+        fileName,
       });
+
+      newImageMeta.save();
     }
   }
 
