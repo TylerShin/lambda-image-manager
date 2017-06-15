@@ -18,6 +18,10 @@ const imageMetaSchema = new Schema({
     type: String,
   },
 }, {
+  throughput: {
+    read: 1,
+    write: 1,
+  },
   timestamps: true,
 });
 

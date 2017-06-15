@@ -54,6 +54,8 @@ npm run deploy:prod
 **IMPORTANT**
 
 ![Set API Gateway](https://m7ix47c297.execute-api.us-east-1.amazonaws.com/prod/getImage?id=2017-06-11T03:22:10.250Z&filename=a11ebe37-312f-4178-b43a-517fe801340e)
+(this image is actually from my own service by using this repository)
+
 
 You should set lambda-image-manager's API Gateway's binary support option.
 
